@@ -40,15 +40,14 @@ const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
   /**
    * We're using the useEditThreadMetadata hook to edit the metadata
    * of a thread.
-   *
-   * useEditThreadMetadata: https://liveblocks.io/docs/api-reference/liveblocks-react#useEditThreadMetadata
+
    */
   const editThreadMetadata = useEditThreadMetadata();
 
   /**
    * We're using the useUser hook to get the user of the thread.
    *
-   * useUser: https://liveblocks.io/docs/api-reference/liveblocks-react#useUser
+ 
    */
   const { isLoading } = useUser(thread.comments[0].userId);
 

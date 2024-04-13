@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import { twMerge } from "tailwind-merge";
 import { type ClassValue, clsx } from "clsx";
-
+import PptxGenJS from "pptxgenjs";
 const adjectives = [
   "Happy",
   "Creative",
@@ -118,4 +118,32 @@ export const exportToPdf = () => {
 
   // download the pdf
   doc.save("canvas.pdf");
+};
+
+
+
+export const exportToPptx = () => {
+  const canvas = document.querySelector("canvas");
+  if (!canvas) return;
+
+  // Create a new presentation
+  const pres = new PptxGenJS();
+
+  // Add a slide
+  const slide = pres.addSlide();
+
+  // Get the canvas data URL
+  const dataUrl = canvas.toDataURL("image/png");
+
+  // Add the image to the slide
+  slide.addImage({
+    data: dataUrl,
+    x: 0,
+    y: 0,
+    w: "100%",
+    h: "100%"
+  });
+
+  // Download the PPTX
+  pres.writeFile({ fileName: "canvas-presentation.pptx" });
 };

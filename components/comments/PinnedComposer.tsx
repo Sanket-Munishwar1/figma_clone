@@ -25,7 +25,7 @@ const PinnedComposer = ({ onComposerSubmit, ...props }: Props) => {
          * Liveblocks provides a Composer component that allows to
          * create/edit/delete comments.
          *
-         * Composer: https://liveblocks.io/docs/api-reference/liveblocks-react-comments#Composer
+
          */}
         <Composer
           onComposerSubmit={onComposerSubmit}

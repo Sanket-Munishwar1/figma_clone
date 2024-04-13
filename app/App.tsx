@@ -1,7 +1,7 @@
 "use client";
 
 import { fabric } from "fabric";
-import { useEffect, useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 
 import { useMutation, useRedo, useStorage, useUndo } from "@/liveblocks.config";
 import {
@@ -23,15 +23,9 @@ import { LeftSidebar, Live, Navbar, RightSidebar } from "@/components/index";
 import { handleImageUpload } from "@/lib/shapes";
 import { defaultNavElement } from "@/constants";
 import { ActiveElement, Attributes } from "@/types/type";
+import { pages } from "next/dist/build/templates/app-page";
 
 const Home = () => {
-  /**
-   * useUndo and useRedo are hooks provided by Liveblocks that allow you to
-   * undo and redo mutations.
-   *
-   * useUndo: https://liveblocks.io/docs/api-reference/liveblocks-react#useUndo
-   * useRedo: https://liveblocks.io/docs/api-reference/liveblocks-react#useRedo
-   */
   const undo = useUndo();
   const redo = useRedo();
 
@@ -39,8 +33,6 @@ const Home = () => {
    * useStorage is a hook provided by Liveblocks that allows you to store
    * data in a key-value store and automatically sync it with other users
    * i.e., subscribes to updates to that selected data
-   *
-   * useStorage: https://liveblocks.io/docs/api-reference/liveblocks-react#useStorage
    *
    * Over here, we are storing the canvas objects in the key-value store.
    */
@@ -56,6 +48,10 @@ const Home = () => {
    */
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<fabric.Canvas | null>(null);
+
+  const [page, setPage] = useState([
+    <Live canvasRef={canvasRef} undo={undo} redo={redo} />,
+  ]);
 
   /**
    * isDrawing is a boolean that tells us if the user is drawing on the canvas.
@@ -142,9 +138,7 @@ const Home = () => {
    * useMutation is a hook provided by Liveblocks that allows you to perform
    * mutations on liveblocks data.
    *
-   * useMutation: https://liveblocks.io/docs/api-reference/liveblocks-react#useMutation
-   * delete: https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap.delete
-   * get: https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap.get
+   
    *
    * We're using this mutation to delete a shape from the key-value store when
    * the user deletes a shape from the canvas.
@@ -154,7 +148,7 @@ const Home = () => {
      * canvasObjects is a Map that contains all the shapes in the key-value.
      * Like a store. We can create multiple stores in liveblocks.
      *
-     * delete: https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap.delete
+
      */
     const canvasObjects = storage.get("canvasObjects");
     canvasObjects.delete(shapeId);
@@ -164,8 +158,7 @@ const Home = () => {
    * deleteAllShapes is a mutation that deletes all the shapes from the
    * key-value store of liveblocks.
    *
-   * delete: https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap.delete
-   * get: https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap.get
+
    *
    * We're using this mutation to delete all the shapes from the key-value store when the user clicks on the reset button.
    */
@@ -209,7 +202,7 @@ const Home = () => {
     /**
      * set is a method provided by Liveblocks that allows you to set a value
      *
-     * set: https://liveblocks.io/docs/api-reference/liveblocks-client#LiveMap.set
+   
      */
     canvasObjects.set(objectId, shapeData);
   }, []);
@@ -281,8 +274,7 @@ const Home = () => {
      * listen to the mouse down event on the canvas which is fired when the
      * user clicks on the canvas
      *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+  
      */
     canvas.on("mouse:down", (options) => {
       handleCanvasMouseDown({
@@ -298,8 +290,7 @@ const Home = () => {
      * listen to the mouse move event on the canvas which is fired when the
      * user moves the mouse on the canvas
      *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+ 
      */
     canvas.on("mouse:move", (options) => {
       handleCanvaseMouseMove({
@@ -315,9 +306,7 @@ const Home = () => {
     /**
      * listen to the mouse up event on the canvas which is fired when the
      * user releases the mouse on the canvas
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+  
      */
     canvas.on("mouse:up", () => {
       handleCanvasMouseUp({
@@ -335,9 +324,7 @@ const Home = () => {
      * listen to the path created event on the canvas which is fired when
      * the user creates a path on the canvas using the freeform drawing
      * mode
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+
      */
     canvas.on("path:created", (options) => {
       handlePathCreated({
@@ -351,9 +338,7 @@ const Home = () => {
      * when the user modifies an object on the canvas. Basically, when the
      * user changes the width, height, color etc properties/attributes of
      * the object or moves the object on the canvas.
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+   
      */
     canvas.on("object:modified", (options) => {
       handleCanvasObjectModified({
@@ -365,9 +350,7 @@ const Home = () => {
     /**
      * listen to the object moving event on the canvas which is fired
      * when the user moves an object on the canvas.
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+    
      */
     canvas?.on("object:moving", (options) => {
       handleCanvasObjectMoving({
@@ -378,9 +361,7 @@ const Home = () => {
     /**
      * listen to the selection created event on the canvas which is fired
      * when the user selects an object on the canvas.
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+   
      */
     canvas.on("selection:created", (options) => {
       handleCanvasSelectionCreated({
@@ -393,9 +374,7 @@ const Home = () => {
     /**
      * listen to the scaling event on the canvas which is fired when the
      * user scales an object on the canvas.
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+
      */
     canvas.on("object:scaling", (options) => {
       handleCanvasObjectScaling({
@@ -407,9 +386,7 @@ const Home = () => {
     /**
      * listen to the mouse wheel event on the canvas which is fired when
      * the user scrolls the mouse wheel on the canvas.
-     *
-     * Event inspector: http://fabricjs.com/events
-     * Event list: http://fabricjs.com/docs/fabric.Canvas.html#fire
+  
      */
     canvas.on("mouse:wheel", (options) => {
       handleCanvasZoom({
@@ -453,9 +430,7 @@ const Home = () => {
       /**
        * dispose is a method provided by Fabric that allows you to dispose
        * the canvas. It clears the canvas and removes all the event
-       * listeners
-       *
-       * dispose: http://fabricjs.com/docs/fabric.Canvas.html#dispose
+
        */
       canvas.dispose();
 
@@ -479,6 +454,11 @@ const Home = () => {
     };
   }, [canvasRef]); // run this effect only once when the component mounts and the canvasRef changes
 
+  const addNewPage = () => {
+    const newPage = <Live canvasRef={canvasRef} undo={undo} redo={redo} />;
+    setPage([...page, newPage]);
+  };
+
   // render the canvas when the canvasObjects from live storage changes
   useEffect(() => {
     renderCanvas({
@@ -489,6 +469,40 @@ const Home = () => {
   }, [canvasObjects]);
 
   return (
+    // <main className='h-screen overflow-hidden'>
+    //   <Navbar
+    //     imageInputRef={imageInputRef}
+    //     activeElement={activeElement}
+    //     handleImageUpload={(e: any) => {
+    //       // prevent the default behavior of the input element
+    //       e.stopPropagation();
+
+    //       handleImageUpload({
+    //         file: e.target.files[0],
+    //         canvas: fabricRef as any,
+    //         shapeRef,
+    //         syncShapeInStorage,
+    //       });
+    //     }}
+    //     handleActiveElement={handleActiveElement}
+    //   />
+
+    //   <section className='flex h-full flex-row'>
+    //     <LeftSidebar allShapes={Array.from(canvasObjects)} />
+
+    //     <Live canvasRef={canvasRef} undo={undo} redo={redo} />
+
+    //     <RightSidebar
+    //       elementAttributes={elementAttributes}
+    //       setElementAttributes={setElementAttributes}
+    //       fabricRef={fabricRef}
+    //       isEditingRef={isEditingRef}
+    //       activeObjectRef={activeObjectRef}
+    //       syncShapeInStorage={syncShapeInStorage}
+    //     />
+    //   </section>
+    // </main>
+
     <main className='h-screen overflow-hidden'>
       <Navbar
         imageInputRef={imageInputRef}
@@ -506,11 +520,21 @@ const Home = () => {
         }}
         handleActiveElement={handleActiveElement}
       />
-
       <section className='flex h-full flex-row'>
         <LeftSidebar allShapes={Array.from(canvasObjects)} />
-
-        <Live canvasRef={canvasRef} undo={undo} redo={redo} />
+        <div className='flex-1 overflow-auto '>
+          {page.map((pages, index) => (
+            <div key={index} className='page mb-4'>
+              {pages}
+            </div>
+          ))}
+          <button
+            onClick={addNewPage}
+            className='w-full bg-blue-500 p-2 text-white'
+          >
+            Add Page
+          </button>
+        </div>
 
         <RightSidebar
           elementAttributes={elementAttributes}

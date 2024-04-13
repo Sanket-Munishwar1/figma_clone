@@ -52,7 +52,7 @@ export const handleCanvasMouseDown = ({
    * get target object i.e., the object that is clicked
    * findtarget() returns the object that is clicked
    *
-   * findTarget: http://fabricjs.com/docs/fabric.Canvas.html#findTarget
+ 
    */
   const target = canvas.findTarget(options.e, false);
 
@@ -82,7 +82,7 @@ export const handleCanvasMouseDown = ({
 
     /**
      * setCoords() is used to update the controls of the object
-     * setCoords: http://fabricjs.com/docs/fabric.Object.html#setCoords
+    
      */
     target.setCoords();
   } else {
@@ -96,7 +96,7 @@ export const handleCanvasMouseDown = ({
 
     // if shapeRef is not null, add it to canvas
     if (shapeRef.current) {
-      // add: http://fabricjs.com/docs/fabric.Canvas.html#add
+    
       canvas.add(shapeRef.current);
     }
   }
@@ -161,7 +161,7 @@ export const handleCanvaseMouseMove = ({
   }
 
   // render objects on canvas
-  // renderAll: http://fabricjs.com/docs/fabric.Canvas.html#renderAll
+
   canvas.renderAll();
 
   // sync shape in storage
@@ -351,8 +351,7 @@ export const renderCanvas = ({
      * 1. objectData: object data to render on canvas
      * 2. callback: callback function to execute after rendering objects
      * on canvas
-     *
-     * enlivenObjects: http://fabricjs.com/docs/fabric.util.html#.enlivenObjectEnlivables
+    
      */
     fabric.util.enlivenObjects(
       [objectData],
@@ -372,7 +371,7 @@ export const renderCanvas = ({
        * A namespace is a string that is used to identify the type of
        * object.
        *
-       * Fabric Namespace: http://fabricjs.com/docs/fabric.html
+
        */
       "fabric"
     );
@@ -414,7 +413,7 @@ export const handleCanvasZoom = ({
   zoom = Math.min(Math.max(minZoom, zoom + delta * zoomStep), maxZoom);
 
   // set zoom to canvas
-  // zoomToPoint: http://fabricjs.com/docs/fabric.Canvas.html#zoomToPoint
+
   canvas.zoomToPoint({ x: options.e.offsetX, y: options.e.offsetY }, zoom);
 
   options.e.preventDefault();

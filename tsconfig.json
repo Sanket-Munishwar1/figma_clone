@@ -31,6 +31,6 @@
     ".next/types/**/*.ts",
     ".next/types/**/*.tsx",
     "./types/**/*.d.ts"
-  ],
+, "components/ui/contextMenuModel.js"  ],
   "exclude": ["node_modules"]
 }
